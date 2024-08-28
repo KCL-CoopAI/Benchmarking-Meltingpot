@@ -27,3 +27,7 @@ __pycache__/
 # Saved models.
 /examples/results/
 /meltingpot/assets/
+
+# wandb
+wandb/
+results/

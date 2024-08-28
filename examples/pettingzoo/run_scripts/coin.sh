@@ -1,4 +1,4 @@
-python sb3_independent.py \
+python ../sb3_independent.py \
 --env-name coins \
 --num-cpus 64 \
 --num-envs 64 \
