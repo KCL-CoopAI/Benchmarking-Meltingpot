@@ -257,12 +257,19 @@ def train(config, local_mode, use_wandb, num_iterations=1):
   stop = {
       "training_iteration": num_iterations,
   }
-  return tune.Tuner(
+  if use_wandb:
+    return tune.Tuner(
       "PPO",
       param_space=config.to_dict(),
         run_config=air.RunConfig(stop=stop, verbose=1,
                                callbacks=[WandbLoggerCallback(project="MeltingPot-Benchmarking")],
-        ).fit() if use_wandb else air.RunConfig(stop=stop, verbose=1)).fit()
+        )).fit()
+  else:
+    return tune.Tuner(
+      "PPO",
+      param_space=config.to_dict(),
+        run_config=air.RunConfig(stop=stop, verbose=1,
+        )).fit()
 
 
 def main(args):
