@@ -248,7 +248,7 @@ def get_config(
   return config
 
 
-def train(config, local_mode, use_wandb, num_cpus, num_iterations=1):
+def train(config, alg, local_mode, use_wandb, num_cpus, num_iterations=1):
   """Trains a model.
 
   Args:
@@ -263,7 +263,7 @@ def train(config, local_mode, use_wandb, num_cpus, num_iterations=1):
   stop = {
       "training_iteration": num_iterations,
   }
-  alg = config.alg
+  alg = alg
   if use_wandb:
     return tune.Tuner(
       alg,
@@ -287,7 +287,7 @@ def main(args):
       alg=args.alg,
       use_lstm=args.use_lstm,
   )
-  results = train(config, local_mode=args.local_mode, use_wandb=args.use_wandb, num_cpus=args.num_cpus, num_iterations=args.total_iterations)
+  results = train(config, alg=args.alg, local_mode=args.local_mode, use_wandb=args.use_wandb, num_cpus=args.num_cpus, num_iterations=args.total_iterations)
   print(results)
   assert results.num_errors == 0
 
