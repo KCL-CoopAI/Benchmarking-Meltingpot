@@ -309,7 +309,7 @@ def main(args):
 
   tensorboard_log = "./results/sb3/harvest_open_ppo_paramsharing"
 
-
+  wandb.login(key='7b4450a7802a388e2ae562867f67df1012b1b88d')
   run = wandb.init(config=args,
                          project="BenchMark_MeltingPot",
                         #  entity=args.user_name, 
