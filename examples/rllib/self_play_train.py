@@ -123,7 +123,7 @@ def parse_args():
         default=0.05,
         help="Disadvantageous inequity aversion factor",
     )
-    parser.add_argument("--seed", type=bool, default=False)
+    parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--use_wandb", type=bool, default=False)
     parser.add_argument("--local_mode", type=bool, default=False)
     parser.add_argument("--use_lstm", type=int, default=0)
