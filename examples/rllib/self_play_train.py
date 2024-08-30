@@ -242,7 +242,7 @@ def get_config(
   return config
 
 
-def train(config, local_mode, use_wandb, num_iterations=1):
+def train(config, local_mode, use_wandb, num_cpus, num_iterations=1):
   """Trains a model.
 
   Args:
@@ -253,7 +253,7 @@ def train(config, local_mode, use_wandb, num_iterations=1):
     Training results.
   """
   tune.register_env("meltingpot", utils.env_creator)
-  ray.init(local_mode=local_mode)
+  ray.init(num_cpus=num_cpus, local_mode=local_mode)
   stop = {
       "training_iteration": num_iterations,
   }
@@ -281,7 +281,7 @@ def main(args):
       use_lstm=args.use_lstm,
   )
   config = get_config()
-  results = train(config, local_mode=args.local_mode, use_wandb=args.use_wandb, num_iterations=args.total_iterations)
+  results = train(config, local_mode=args.local_mode, use_wandb=args.use_wandb, num_cpus=args.num_cpus, num_iterations=args.total_iterations)
   print(results)
   assert results.num_errors == 0
 
