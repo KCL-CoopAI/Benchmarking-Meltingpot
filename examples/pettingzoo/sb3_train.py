@@ -312,7 +312,7 @@ def main(args):
 
   run = wandb.init(config=args,
                          project="BenchMark_MeltingPot",
-                         entity=args.user_name, 
+                        #  entity=args.user_name, 
                          notes=socket.gethostname(),
                          name=str(env_name) +"_"+ str(model) + "_" + str(args.seed),
                          group=str(env_name) +"_"+ str(model),
