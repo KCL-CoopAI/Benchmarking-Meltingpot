@@ -126,7 +126,7 @@ def parse_args():
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--use_wandb", type=bool, default=False)
     parser.add_argument("--local_mode", type=bool, default=False)
-    parser.add_argument("--use_lstm", type=int, default=0)
+    parser.add_argument("--use_lstm", type=bool, default=False)
     parser.add_argument("--user_name", type=str, default="k23048755")
     parser.add_argument("--alg", type=str, default='PPO', choices=['PPO', 'A2C'])
     args = parser.parse_args()
