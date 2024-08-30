@@ -128,7 +128,7 @@ def parse_args():
     parser.add_argument("--local_mode", type=bool, default=False)
     parser.add_argument("--use_lstm", type=bool, default=False)
     parser.add_argument("--user_name", type=str, default="k23048755")
-    parser.add_argument("--alg", type=str, default='A3C', choices=['PPO', 'A3C', 'APPO'])
+    parser.add_argument("--alg", type=str, default='PPO', choices=['PPO', 'A3C', 'APPO'])
     args = parser.parse_args()
     return args
 
