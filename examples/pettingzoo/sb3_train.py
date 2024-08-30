@@ -139,7 +139,7 @@ def parse_args():
         help="Disadvantageous inequity aversion factor",
     )
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--user_name", type=str, default="shuqing.shi")
+    parser.add_argument("--user_name", type=str, default="shuqing-shi")
     parser.add_argument("--model", type=str, default='baseline')
     parser.add_argument("--alg", type=str, default='PPO', choices=['PPO', 'A2C'])
     parser.add_argument("--using_same_eval", type=bool, default=True)
@@ -311,8 +311,8 @@ def main(args):
 
 
   run = wandb.init(config=args,
-                         project="BenchMark",
-                         entity="melting-pot", 
+                         project="BenchMark_MeltingPot",
+                         entity=args.user_name, 
                          notes=socket.gethostname(),
                          name=str(env_name) +"_"+ str(model) + "_" + str(args.seed),
                          group=str(env_name) +"_"+ str(model),
