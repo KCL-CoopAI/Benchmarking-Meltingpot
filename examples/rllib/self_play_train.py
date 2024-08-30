@@ -19,7 +19,7 @@ from meltingpot import substrate
 import ray
 from ray import air
 from ray import tune
-from ray.rllib.algorithms import ppo
+from ray.rllib.algorithms import ppo,a3c,appo
 from ray.rllib.policy import policy
 from ray.air.integrations.wandb import WandbLoggerCallback
 import utils
@@ -128,12 +128,13 @@ def parse_args():
     parser.add_argument("--local_mode", type=bool, default=False)
     parser.add_argument("--use_lstm", type=bool, default=False)
     parser.add_argument("--user_name", type=str, default="k23048755")
-    parser.add_argument("--alg", type=str, default='PPO', choices=['PPO', 'A2C'])
+    parser.add_argument("--alg", type=str, default='A3C', choices=['PPO', 'A3C', 'APPO'])
     args = parser.parse_args()
     return args
 
 def get_config(
     substrate_name: str = "coins",
+    alg: str = 'PPO',
     num_rollout_workers: int = 2,
     rollout_fragment_length: int = 1000,
     train_batch_size: int = 6400,
@@ -162,7 +163,12 @@ def get_config(
     The configuration for running the experiment.
   """
   # Gets the default training configuration
-  config = ppo.PPOConfig()
+  if alg == 'PPO':
+    config = ppo.PPOConfig()
+  elif alg == 'A3C':
+    config = a3c.A3CConfig()
+  elif alg == 'APPO':
+    config = appo.APPOConfig()
   # Number of arenas.
   config.num_rollout_workers = num_rollout_workers
   # This is to match our unroll lengths.
@@ -277,7 +283,7 @@ def main(args):
   config = get_config(
       substrate_name=args.env_name,
       num_rollout_workers=args.num_workers,
-      # rollout_fragment_length=args.rollout_len,
+      alg=args.alg,
       use_lstm=args.use_lstm,
   )
   results = train(config, local_mode=args.local_mode, use_wandb=args.use_wandb, num_cpus=args.num_cpus, num_iterations=args.total_iterations)
