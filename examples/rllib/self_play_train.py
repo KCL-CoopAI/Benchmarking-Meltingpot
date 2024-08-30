@@ -71,7 +71,7 @@ def parse_args():
     parser.add_argument(
         "--num-workers",
         type=int,
-        default=4,
+        default=2,
         help="The number of workers",
     )
     parser.add_argument(
@@ -183,7 +183,7 @@ def get_config(
   config = config.framework("torch")
   # Use GPUs iff `RLLIB_NUM_GPUS` env var set to > 0.
   # config.num_gpus = int(os.environ.get("RLLIB_NUM_GPUS", "0"))
-  config.num_gpus = 1
+  config.num_gpus = 0
   config.log_level = "DEBUG"
 
   # 2. Set environment config. This will be passed to
