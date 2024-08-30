@@ -71,7 +71,7 @@ def parse_args():
     parser.add_argument(
         "--num-workers",
         type=int,
-        default=2,
+        default=4,
         help="The number of workers",
     )
     parser.add_argument(
@@ -268,8 +268,8 @@ def train(config, local_mode, use_wandb, num_cpus, num_iterations=1):
     return tune.Tuner(
       "PPO",
       param_space=config.to_dict(),
-        run_config=air.RunConfig(stop=stop, verbose=1,
-        )).fit()
+        run_config=air.RunConfig(stop=stop, verbose=1),
+        ).fit()
 
 
 def main(args):
@@ -277,10 +277,9 @@ def main(args):
   config = get_config(
       substrate_name=args.env_name,
       num_rollout_workers=args.num_workers,
-      rollout_fragment_length=args.rollout_len,
+      # rollout_fragment_length=args.rollout_len,
       use_lstm=args.use_lstm,
   )
-  config = get_config()
   results = train(config, local_mode=args.local_mode, use_wandb=args.use_wandb, num_cpus=args.num_cpus, num_iterations=args.total_iterations)
   print(results)
   assert results.num_errors == 0
