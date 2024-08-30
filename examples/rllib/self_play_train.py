@@ -176,8 +176,8 @@ def get_config(
   # Use TensorFlow as the tensor framework.
   config = config.framework("torch")
   # Use GPUs iff `RLLIB_NUM_GPUS` env var set to > 0.
-  # config.num_gpus = int(os.environ.get("RLLIB_NUM_GPUS", "0"))
-  config.num_gpus = 1
+  config.num_gpus = int(os.environ.get("RLLIB_NUM_GPUS", "0"))
+  # config.num_gpus = 1
   config.log_level = "DEBUG"
 
   # 2. Set environment config. This will be passed to
