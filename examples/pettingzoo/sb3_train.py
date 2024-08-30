@@ -139,7 +139,7 @@ def parse_args():
         help="Disadvantageous inequity aversion factor",
     )
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--user_name", type=str, default="shuqing-shi")
+    parser.add_argument("--user_name", type=str, default="k23048755")
     parser.add_argument("--model", type=str, default='baseline')
     parser.add_argument("--alg", type=str, default='PPO', choices=['PPO', 'A2C'])
     parser.add_argument("--using_same_eval", type=bool, default=True)
@@ -309,15 +309,15 @@ def main(args):
 
   tensorboard_log = "./results/sb3/harvest_open_ppo_paramsharing"
 
-  wandb.login(key='7b4450a7802a388e2ae562867f67df1012b1b88d')
   run = wandb.init(config=args,
-                         project="BenchMark_MeltingPot",
-                        #  entity=args.user_name, 
-                         notes=socket.gethostname(),
-                         name=str(env_name) +"_"+ str(model) + "_" + str(args.seed),
-                         group=str(env_name) +"_"+ str(model),
-                         dir="./",
-                         reinit=True)
+                  project="BenchMark_MeltingPot",
+                  entity=args.user_name, 
+                  notes=socket.gethostname(),
+                  name=str(env_name) +"_"+ str(model) + "_" + str(args.seed),
+                  group=str(env_name) +"_"+ str(model),
+                  dir="./",
+                  reinit=True)
+  
   if alg == "PPO":
     model = stable_baselines3.PPO
     model = model(
