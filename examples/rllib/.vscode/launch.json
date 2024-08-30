@@ -13,7 +13,7 @@
             "console": "integratedTerminal",
             "python": "/home/shuqingshi/miniconda3/envs/meltingpot/bin/python",
             "justMyCode": false,
-
+            // "args": ["--local"]
 
         },
     ]

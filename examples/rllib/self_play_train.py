@@ -21,12 +21,12 @@ from ray import air
 from ray import tune
 from ray.rllib.algorithms import ppo
 from ray.rllib.policy import policy
-
+from ray.air.integrations.wandb import WandbLoggerCallback
 import utils
 
 
 def get_config(
-    substrate_name: str = "bach_or_stravinsky_in_the_matrix__repeated",
+    substrate_name: str = "coins",
     num_rollout_workers: int = 2,
     rollout_fragment_length: int = 100,
     train_batch_size: int = 6400,
@@ -66,7 +66,7 @@ def get_config(
   # Use the raw observations/actions as defined by the environment.
   config.preprocessor_pref = None
   # Use TensorFlow as the tensor framework.
-  config = config.framework("pytorch")
+  config = config.framework("torch")
   # Use GPUs iff `RLLIB_NUM_GPUS` env var set to > 0.
   config.num_gpus = int(os.environ.get("RLLIB_NUM_GPUS", "0"))
   config.log_level = "DEBUG"
@@ -124,7 +124,7 @@ def get_config(
   config.model["conv_activation"] = "relu"
   config.model["post_fcnet_hiddens"] = post_fcnet_hiddens
   config.model["post_fcnet_activation"] = "relu"
-  config.model["use_lstm"] = True
+  config.model["use_lstm"] = False
   config.model["lstm_use_prev_action"] = True
   config.model["lstm_use_prev_reward"] = False
   config.model["lstm_cell_size"] = lstm_cell_size
@@ -143,14 +143,15 @@ def train(config, num_iterations=1):
     Training results.
   """
   tune.register_env("meltingpot", utils.env_creator)
-  ray.init()
+  ray.init(local_mode=True)
   stop = {
       "training_iteration": num_iterations,
   }
   return tune.Tuner(
       "PPO",
       param_space=config.to_dict(),
-      run_config=air.RunConfig(stop=stop, verbose=1),
+      run_config=air.RunConfig(stop=stop, verbose=1)
+                               # callbacks=[WandbLoggerCallback(project="MeltingPot-Benchmarking")]),
   ).fit()
 
 
