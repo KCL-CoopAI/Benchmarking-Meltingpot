@@ -135,7 +135,7 @@ def parse_args():
 def get_config(
     substrate_name: str = "coins",
     num_rollout_workers: int = 2,
-    rollout_fragment_length: int = 100,
+    rollout_fragment_length: int = 1000,
     train_batch_size: int = 6400,
     fcnet_hiddens=(64, 64),
     post_fcnet_hiddens=(256,),
@@ -166,7 +166,7 @@ def get_config(
   # Number of arenas.
   config.num_rollout_workers = num_rollout_workers
   # This is to match our unroll lengths.
-  config.rollout_fragment_length = rollout_fragment_length
+  config.rollout_fragment_length = 'auto'
   # Total (time x batch) timesteps on the learning update.
   config.train_batch_size = train_batch_size
   # Mini-batch size.
@@ -233,7 +233,7 @@ def get_config(
   config.model["conv_activation"] = "relu"
   config.model["post_fcnet_hiddens"] = post_fcnet_hiddens
   config.model["post_fcnet_activation"] = "relu"
-  config.model["use_lstm"] = False
+  config.model["use_lstm"] = use_lstm
   config.model["lstm_use_prev_action"] = True
   config.model["lstm_use_prev_reward"] = False
   config.model["lstm_cell_size"] = lstm_cell_size
