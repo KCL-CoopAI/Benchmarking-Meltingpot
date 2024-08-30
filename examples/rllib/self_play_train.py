@@ -69,10 +69,10 @@ def parse_args():
         help="The number of cpus",
     )
     parser.add_argument(
-        "--num-envs",
+        "--num-workers",
         type=int,
         default=2,
-        help="The number of envs",
+        help="The number of workers",
     )
     parser.add_argument(
         "--kl-threshold",
@@ -176,7 +176,8 @@ def get_config(
   # Use TensorFlow as the tensor framework.
   config = config.framework("torch")
   # Use GPUs iff `RLLIB_NUM_GPUS` env var set to > 0.
-  config.num_gpus = int(os.environ.get("RLLIB_NUM_GPUS", "0"))
+  # config.num_gpus = int(os.environ.get("RLLIB_NUM_GPUS", "0"))
+  config.num_gpus = 1
   config.log_level = "DEBUG"
 
   # 2. Set environment config. This will be passed to
@@ -268,7 +269,7 @@ def main(args):
   set_seed(args.seed)
   config = get_config(
       substrate_name=args.env_name,
-      num_rollout_workers=args.num_envs,
+      num_rollout_workers=args.num_workers,
       rollout_fragment_length=args.rollout_len,
       use_lstm=args.use_lstm,
   )
