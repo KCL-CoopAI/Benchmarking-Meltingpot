@@ -183,7 +183,7 @@ def get_config(
   config = config.framework("torch")
   # Use GPUs iff `RLLIB_NUM_GPUS` env var set to > 0.
   # config.num_gpus = int(os.environ.get("RLLIB_NUM_GPUS", "0"))
-  config.num_gpus = 0
+  config.num_gpus = 1
   config.log_level = "DEBUG"
 
   # 2. Set environment config. This will be passed to
@@ -259,7 +259,7 @@ def train(config, alg, local_mode, use_wandb, num_cpus, num_iterations=1):
     Training results.
   """
   tune.register_env("meltingpot", utils.env_creator)
-  ray.init(num_cpus=num_cpus, local_mode=local_mode)
+  ray.init(num_cpus=num_cpus, num_gpus=config.num_gpus, local_mode=local_mode)
   stop = {
       "training_iteration": num_iterations,
   }
