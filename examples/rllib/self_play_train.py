@@ -259,7 +259,8 @@ def train(config, alg, local_mode, use_wandb, num_cpus, num_iterations=1):
     Training results.
   """
   tune.register_env("meltingpot", utils.env_creator)
-  ray.init(num_cpus=num_cpus, num_gpus=config.num_gpus, local_mode=local_mode)
+  # ray.init(num_cpus=num_cpus, num_gpus=config.num_gpus, local_mode=local_mode)
+  ray.init(local_mode=local_mode)
   stop = {
       "training_iteration": num_iterations,
   }
