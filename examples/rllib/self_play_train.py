@@ -260,7 +260,9 @@ def train(config, alg, local_mode, use_wandb, num_cpus, num_iterations=1):
   """
   tune.register_env("meltingpot", utils.env_creator)
   # ray.init(num_cpus=num_cpus, num_gpus=config.num_gpus, local_mode=local_mode)
-  ray.init(num_cpus=num_cpus, num_gpus=config.num_gpus, local_mode=local_mode,ignore_reinit_error=True, temp_dir="/tmp/ray/")
+  # 设置自定义的 Ray 临时目录
+  os.environ["RAY_TEMP_DIR"] = "/path/to/custom/temp_dir"
+  ray.init(num_cpus=num_cpus, num_gpus=config.num_gpus, local_mode=local_mode,ignore_reinit_error=True)
   stop = {
       "training_iteration": num_iterations,
   }
