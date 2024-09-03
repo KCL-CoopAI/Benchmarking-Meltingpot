@@ -201,8 +201,10 @@ def get_config(
   player_to_agent = {}
   for i in range(len(player_roles)):
     rgb_shape = test_env.observation_space[f"player_{i}"]["RGB"].shape
-    sprite_x = rgb_shape[0] // 8
-    sprite_y = rgb_shape[1] // 8
+    # sprite_x = rgb_shape[0] // 8
+    # sprite_y = rgb_shape[1] // 8
+    sprite_x = rgb_shape[0] 
+    sprite_y = rgb_shape[1] 
 
     policies[f"agent_{i}"] = policy.PolicySpec(
         policy_class=None,  # use default policy
@@ -215,7 +217,7 @@ def get_config(
         #     },
         config={
             "model": {
-                "conv_filters": [[16, [3, 3], 1],[32,[3,3],1],
+                "conv_filters": [[16, [3, 3], 1],
                                  [64, [sprite_x * 8, sprite_y * 8], 1]],
             },
         })
