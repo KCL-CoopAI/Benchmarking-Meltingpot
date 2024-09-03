@@ -125,7 +125,7 @@ def parse_args():
     )
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--use_wandb", type=bool, default=False)
-    parser.add_argument("--local_mode", type=bool, default=False)
+    parser.add_argument("--local_mode", type=bool, default=True)
     parser.add_argument("--use_lstm", type=bool, default=False)
     parser.add_argument("--user_name", type=str, default="k23048755")
     parser.add_argument("--alg", type=str, default='PPO', choices=['PPO', 'A3C', 'APPO'])
@@ -183,7 +183,7 @@ def get_config(
   config = config.framework("torch")
   # Use GPUs iff `RLLIB_NUM_GPUS` env var set to > 0.
   # config.num_gpus = int(os.environ.get("RLLIB_NUM_GPUS", "0"))
-  config.num_gpus = 1
+  config.num_gpus = 0
   config.log_level = "DEBUG"
 
   # 2. Set environment config. This will be passed to
@@ -208,10 +208,15 @@ def get_config(
         policy_class=None,  # use default policy
         observation_space=test_env.observation_space[f"player_{i}"],
         action_space=test_env.action_space[f"player_{i}"],
+        # config={
+        #     "model": {
+        #         "conv_filters": [[16, [8, 8], 8],
+        #                          [128, [sprite_x, sprite_y], 1]],
+        #     },
         config={
             "model": {
-                "conv_filters": [[16, [8, 8], 8],
-                                 [128, [sprite_x, sprite_y], 1]],
+                "conv_filters": [[16, [3, 3], 1],[32,[3,3],1],
+                                 [64, [sprite_x * 8, sprite_y * 8], 1]],
             },
         })
     player_to_agent[f"player_{i}"] = f"agent_{i}"
