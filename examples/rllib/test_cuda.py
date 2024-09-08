@@ -1,5 +1,6 @@
 import torch
 import sys
+import time
 
 def test_cuda():
     # Check if CUDA is available
@@ -34,4 +35,4 @@ def test_cuda():
 
 if __name__ == "__main__":
     test_cuda()
-
+    print("Done")

@@ -28,6 +28,18 @@ import argparse
 import random
 import numpy as np
 
+def setup_gpu():
+    if torch.cuda.is_available():
+        device = torch.device("cuda")
+        num_gpus = torch.cuda.device_count()
+        print(f"Using GPU. Number of available GPUs: {num_gpus}")
+        print(f"Current GPU: {torch.cuda.get_device_name(torch.cuda.current_device())}")
+    else:
+        device = torch.device("cpu")
+        num_gpus = 0
+        print("GPU not available. Using CPU.")
+    return device, num_gpus
+
 def set_seed(seed: int = 42) -> None:
     np.random.seed(seed)
     random.seed(seed)
@@ -65,13 +77,13 @@ def parse_args():
     parser.add_argument(
         "--num-cpus",
         type=int,
-        default=4,
+        default=100,
         help="The number of cpus",
     )
     parser.add_argument(
         "--num-workers",
         type=int,
-        default=2,
+        default=90,
         help="The number of workers",
     )
     parser.add_argument(
@@ -136,13 +148,17 @@ def get_config(
     substrate_name: str = "coins",
     alg: str = 'PPO',
     num_rollout_workers: int = 2,
-    rollout_fragment_length: int = 1000,
-    train_batch_size: int = 6400,
-    fcnet_hiddens=(64, 64),
-    post_fcnet_hiddens=(256,),
-    lstm_cell_size: int = 256,
-    sgd_minibatch_size: int = 128,
-    use_lstm: bool = False,
+    rollout_fragment_length: int = 2000,
+    train_batch_size: int = 131072,  # Doubled
+    fcnet_hiddens=(512, 512, 512),  # Increased depth and width
+    post_fcnet_hiddens=(512, 512),  # Increased depth and width
+    lstm_cell_size: int = 512,  # Increased
+    sgd_minibatch_size: int = 4096,  # Doubled
+    use_lstm: bool = True,  # Enabled LSTM
+    num_sgd_iter: int = 60,  # Increased
+    lr: float = 3e-4,  # Explicitly set learning rate
+    vf_clip_param: float = 10.0,
+    clip_param: float = 0.3,
 ):
   """Get the configuration for running an agent on a substrate using RLLib.
 
@@ -216,9 +232,14 @@ def get_config(
         })
     player_to_agent[f"player_{i}"] = f"agent_{i}"
 
-  def policy_mapping_fn(agent_id, **kwargs):
-    del kwargs
-    return player_to_agent[agent_id]
+  # def policy_mapping_fn(agent_id, **kwargs):
+  #   del kwargs
+  #   return player_to_agent[agent_id]
+  def policy_mapping_fn(agent_id, episode=None, worker=None, **kwargs):
+      policy = player_to_agent[agent_id]
+      if torch.cuda.is_available():
+          policy = policy.to(device)
+      return policy
 
   # 5. Configuration for multi-agent setup with one policy per role:
   config.multi_agent(policies=policies, policy_mapping_fn=policy_mapping_fn)
