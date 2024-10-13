@@ -138,9 +138,9 @@ def get_config(
     num_rollout_workers: int = 2,
     rollout_fragment_length: int = 2000,
     train_batch_size: int = 131072,  # Doubled
-    fcnet_hiddens=(512, 512, 512),  # Increased depth and width
-    post_fcnet_hiddens=(512, 512),  # Increased depth and width
-    lstm_cell_size: int = 512,  # Increased
+    fcnet_hiddens=(128, 128),  # Increased depth and width
+    post_fcnet_hiddens=(128, 128),  # Increased depth and width
+    lstm_cell_size: int = 128,  # Increased
     sgd_minibatch_size: int = 4096,  # Doubled
     use_lstm: bool = True,  # Enabled LSTM
     num_sgd_iter: int = 60,  # Increased
