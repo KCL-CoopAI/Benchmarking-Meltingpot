@@ -136,13 +136,17 @@ def get_config(
     substrate_name: str = "coins",
     alg: str = 'PPO',
     num_rollout_workers: int = 2,
-    rollout_fragment_length: int = 1000,
-    train_batch_size: int = 64000,
-    fcnet_hiddens=(64, 64),
-    post_fcnet_hiddens=(256,),
-    lstm_cell_size: int = 256,
-    sgd_minibatch_size: int = 128,
-    use_lstm: bool = False,
+    rollout_fragment_length: int = 2000,
+    train_batch_size: int = 131072,  # Doubled
+    fcnet_hiddens=(512, 512, 512),  # Increased depth and width
+    post_fcnet_hiddens=(512, 512),  # Increased depth and width
+    lstm_cell_size: int = 512,  # Increased
+    sgd_minibatch_size: int = 4096,  # Doubled
+    use_lstm: bool = True,  # Enabled LSTM
+    num_sgd_iter: int = 60,  # Increased
+    lr: float = 3e-4,  # Explicitly set learning rate
+    vf_clip_param: float = 10.0,
+    clip_param: float = 0.3,
 ):
   """Get the configuration for running an agent on a substrate using RLLib.
 
