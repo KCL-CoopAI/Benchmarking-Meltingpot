@@ -127,7 +127,7 @@ def parse_args():
     parser.add_argument("--use_wandb", type=bool, default=False)
     parser.add_argument("--local_mode", type=bool, default=False)
     parser.add_argument("--use_lstm", type=bool, default=False)
-    parser.add_argument("--user_name", type=str, default="k23048755")
+    parser.add_argument("--user_name", type=str, default="shuqing-shi")
     parser.add_argument("--alg", type=str, default='PPO', choices=['PPO', 'A3C', 'APPO'])
     args = parser.parse_args()
     return args
@@ -137,7 +137,7 @@ def get_config(
     alg: str = 'PPO',
     num_rollout_workers: int = 2,
     rollout_fragment_length: int = 1000,
-    train_batch_size: int = 6400,
+    train_batch_size: int = 64000,
     fcnet_hiddens=(64, 64),
     post_fcnet_hiddens=(256,),
     lstm_cell_size: int = 256,
