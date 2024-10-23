@@ -1,0 +1,32 @@
+{
+  "os":  "Linux-6.8.0-47-generic-x86_64-with-glibc2.35",
+  "python":  "3.10.15",
+  "startedAt":  "2024-10-23T15:17:12.257744Z",
+  "program":  "/home/zihao/phd_kcl/Benchmarking-Meltingpot/examples/pettingzoo/sb3_train.py",
+  "codePath":  "examples/pettingzoo/sb3_train.py",
+  "git":  {
+    "remote":  "https://github.com/KCL-CoopAI/Benchmarking-Meltingpot.git",
+    "commit":  "24ddaf44a3c559ff1157864030ec0146f2162c0b"
+  },
+  "email":  "hideinpoopoo@gmail.com",
+  "root":  "/home/zihao/phd_kcl/Benchmarking-Meltingpot",
+  "host":  "nmslap008639",
+  "username":  "zihao",
+  "executable":  "/home/zihao/miniconda3/envs/meltingpot/bin/python",
+  "codePathLocal":  "examples/pettingzoo/sb3_train.py",
+  "cpu_count":  12,
+  "cpu_count_logical":  14,
+  "disk":  {
+    "/":  {
+      "total":  "981132795904",
+      "used":  "129327054848"
+    }
+  },
+  "memory":  {
+    "total":  "33077698560"
+  },
+  "cpu":  {
+    "count":  12,
+    "countLogical":  14
+  }
+}

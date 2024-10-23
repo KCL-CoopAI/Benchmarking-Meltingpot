@@ -1,0 +1,18 @@
+{"time":"2024-10-23T23:17:12.259207598+08:00","level":"INFO","msg":"using version","core version":"0.18.3"}
+{"time":"2024-10-23T23:17:12.259227133+08:00","level":"INFO","msg":"created symlink","path":"/home/zihao/phd_kcl/Benchmarking-Meltingpot/wandb/run-20241023_231712-1t7tefku/logs/debug-core.log"}
+{"time":"2024-10-23T23:17:12.295836864+08:00","level":"ERROR","msg":"dialing: google: could not find default credentials. See https://cloud.google.com/docs/authentication/external/set-up-adc for more information"}
+{"time":"2024-10-23T23:17:12.302394759+08:00","level":"INFO","msg":"created new stream","id":"1t7tefku"}
+{"time":"2024-10-23T23:17:12.302426268+08:00","level":"INFO","msg":"stream: started","id":"1t7tefku"}
+{"time":"2024-10-23T23:17:12.302435317+08:00","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"1t7tefku"}}
+{"time":"2024-10-23T23:17:12.302452036+08:00","level":"INFO","msg":"handler: started","stream_id":{"value":"1t7tefku"}}
+{"time":"2024-10-23T23:17:12.302467817+08:00","level":"INFO","msg":"sender: started","stream_id":{"value":"1t7tefku"}}
+{"time":"2024-10-23T23:17:12.575374456+08:00","level":"INFO","msg":"wandb-core","!BADKEY":null}
+{"time":"2024-10-23T23:17:12.576265787+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-10-23T23:18:56.469810086+08:00","level":"INFO","msg":"stream: closing","id":"1t7tefku"}
+{"time":"2024-10-23T23:18:56.469957859+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-10-23T23:18:56.470236387+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-10-23T23:18:58.999174199+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-10-23T23:18:59.165333495+08:00","level":"INFO","msg":"handler: closed","stream_id":{"value":"1t7tefku"}}
+{"time":"2024-10-23T23:18:59.165458443+08:00","level":"INFO","msg":"sender: closed","stream_id":{"value":"1t7tefku"}}
+{"time":"2024-10-23T23:18:59.165446099+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":{"value":"1t7tefku"}}
+{"time":"2024-10-23T23:18:59.165615864+08:00","level":"INFO","msg":"stream: closed","id":"1t7tefku"}

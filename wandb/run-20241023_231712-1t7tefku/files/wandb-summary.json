@@ -1,0 +1,1 @@
+{"eval/mean_ep_length":899.4,"_wandb":{"runtime":104},"eval/std_reward":4.176122665405273,"time/iterations":1,"time/fps":74,"_step":4000,"time/total_timesteps":4000,"_runtime":104.212165845,"time/time_elapsed":53,"rollout/ep_len_mean":849.5,"rollout/ep_rew_mean":0,"SW_ep_rew_mean":0,"_timestamp":1.7296966866795247e+09,"eval/mean_reward":-0.4000000059604645}

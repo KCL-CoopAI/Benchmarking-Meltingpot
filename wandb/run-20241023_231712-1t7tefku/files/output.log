@@ -1,0 +1,66 @@
+Using cpu device
+Logging to ./results/sb3/harvest_open_ppo_paramsharing/PPO_2
+Eval num_timesteps=1000, episode_reward=-0.40 +/- 11.67
+Episode length: 919.60 +/- 98.47
+---------------------------------
+| eval/              |          |
+|    mean_ep_length  | 920      |
+|    mean_reward     | -0.4     |
+| time/              |          |
+|    total_timesteps | 1000     |
+---------------------------------
+New best mean reward!
+Eval num_timesteps=2000, episode_reward=0.60 +/- 9.05
+Episode length: 1000.00 +/- 0.00
+---------------------------------
+| eval/              |          |
+|    mean_ep_length  | 1e+03    |
+|    mean_reward     | 0.6      |
+| time/              |          |
+|    total_timesteps | 2000     |
+---------------------------------
+New best mean reward!
+Eval num_timesteps=3000, episode_reward=-3.40 +/- 12.53
+Episode length: 759.20 +/- 215.63
+---------------------------------
+| eval/              |          |
+|    mean_ep_length  | 759      |
+|    mean_reward     | -3.4     |
+| time/              |          |
+|    total_timesteps | 3000     |
+---------------------------------
+Eval num_timesteps=4000, episode_reward=-0.40 +/- 4.18
+Episode length: 899.40 +/- 109.91
+---------------------------------
+| eval/              |          |
+|    mean_ep_length  | 899      |
+|    mean_reward     | -0.4     |
+| time/              |          |
+|    total_timesteps | 4000     |
+---------------------------------
+---------------------------------
+| rollout/           |          |
+|    ep_len_mean     | 850      |
+|    ep_rew_mean     | 0.0      |
+| time/              |          |
+|    fps             | 74       |
+|    iterations      | 1        |
+|    time_elapsed    | 53       |
+|    total_timesteps | 4000     |
+---------------------------------
+Traceback (most recent call last):
+  File "/home/zihao/phd_kcl/Benchmarking-Meltingpot/examples/pettingzoo/sb3_train.py", line 367, in <module>
+    main(args=parse_args())
+  File "/home/zihao/phd_kcl/Benchmarking-Meltingpot/examples/pettingzoo/sb3_train.py", line 358, in main
+    model.learn(total_timesteps=total_timesteps, callback=eval_callback)
+  File "/home/zihao/phd_kcl/Benchmarking-Meltingpot/examples/pettingzoo/stable_baselines3/ppo/ppo.py", line 320, in learn
+    return super().learn(
+  File "/home/zihao/phd_kcl/Benchmarking-Meltingpot/examples/pettingzoo/stable_baselines3/common/on_policy_algorithm.py", line 294, in learn
+    self.train()
+  File "/home/zihao/phd_kcl/Benchmarking-Meltingpot/examples/pettingzoo/stable_baselines3/ppo/ppo.py", line 203, in train
+    for rollout_data in self.rollout_buffer.get(self.batch_size, polid=self.polid, is_download=self.is_download):
+  File "/home/zihao/phd_kcl/Benchmarking-Meltingpot/examples/pettingzoo/stable_baselines3/common/buffers.py", line 518, in get
+    yield self._get_samples(indices[start_idx : start_idx + batch_size])
+  File "/home/zihao/phd_kcl/Benchmarking-Meltingpot/examples/pettingzoo/stable_baselines3/common/buffers.py", line 529, in _get_samples
+    self.values[batch_inds].flatten(),
+KeyboardInterrupt

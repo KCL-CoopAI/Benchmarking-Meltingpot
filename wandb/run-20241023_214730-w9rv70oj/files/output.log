@@ -1,0 +1,63 @@
+Using cpu device
+Logging to ./results/sb3/harvest_open_ppo_paramsharing/PPO_1
+Eval num_timesteps=1000, episode_reward=-1.20 +/- 20.09
+Episode length: 979.40 +/- 40.20
+---------------------------------
+| eval/              |          |
+|    mean_ep_length  | 979      |
+|    mean_reward     | -1.2     |
+| time/              |          |
+|    total_timesteps | 1000     |
+---------------------------------
+New best mean reward!
+Eval num_timesteps=2000, episode_reward=-1.20 +/- 9.11
+Episode length: 1000.00 +/- 0.00
+---------------------------------
+| eval/              |          |
+|    mean_ep_length  | 1e+03    |
+|    mean_reward     | -1.2     |
+| time/              |          |
+|    total_timesteps | 2000     |
+---------------------------------
+Eval num_timesteps=3000, episode_reward=-5.40 +/- 9.89
+Episode length: 759.40 +/- 294.27
+---------------------------------
+| eval/              |          |
+|    mean_ep_length  | 759      |
+|    mean_reward     | -5.4     |
+| time/              |          |
+|    total_timesteps | 3000     |
+---------------------------------
+Eval num_timesteps=4000, episode_reward=-4.00 +/- 6.72
+Episode length: 939.80 +/- 120.40
+---------------------------------
+| eval/              |          |
+|    mean_ep_length  | 940      |
+|    mean_reward     | -4       |
+| time/              |          |
+|    total_timesteps | 4000     |
+---------------------------------
+---------------------------------
+| rollout/           |          |
+|    ep_len_mean     | 1e+03    |
+|    ep_rew_mean     | -1.25    |
+| time/              |          |
+|    fps             | 77       |
+|    iterations      | 1        |
+|    time_elapsed    | 51       |
+|    total_timesteps | 4000     |
+---------------------------------
+Traceback (most recent call last):
+  File "/home/zihao/phd_kcl/Benchmarking-Meltingpot/examples/pettingzoo/sb3_train_jax.py", line 369, in <module>
+    main(args=parse_args())
+  File "/home/zihao/phd_kcl/Benchmarking-Meltingpot/examples/pettingzoo/sb3_train_jax.py", line 360, in main
+    model.learn(total_timesteps=total_timesteps, callback=eval_callback)
+  File "/home/zihao/miniconda3/envs/meltingpot/lib/python3.10/site-packages/sbx/ppo/ppo.py", line 313, in learn
+    return super().learn(
+  File "/home/zihao/phd_kcl/Benchmarking-Meltingpot/examples/pettingzoo/stable_baselines3/common/on_policy_algorithm.py", line 294, in learn
+    self.train()
+  File "/home/zihao/miniconda3/envs/meltingpot/lib/python3.10/site-packages/sbx/ppo/ppo.py", line 267, in train
+    (self.policy.actor_state, self.policy.vf_state), (pg_loss, value_loss) = self._one_update(
+  File "/home/zihao/miniconda3/envs/meltingpot/lib/python3.10/site-packages/flax/core/frozen_dict.py", line 162, in tree_unflatten
+    @classmethod
+KeyboardInterrupt

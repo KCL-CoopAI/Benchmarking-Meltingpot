@@ -104,7 +104,7 @@ def parse_args():
     parser.add_argument(
         "--rollout-len",
         type=int,
-        default=10,
+        default=1000,
         help="length of training rollouts AND length at which env is reset",
     )
     parser.add_argument(
@@ -295,7 +295,7 @@ def main(args):
   eval_env = vec_env.VecMonitor(eval_env)
   eval_env = vec_env.VecTransposeImage(eval_env, True)
 
-  eval_freq = 1000 // (num_envs * num_agents)
+  eval_freq = 10000 // (num_envs * num_agents)
 
   policy_kwargs = dict(
       features_extractor_class=CustomCNN,
@@ -353,9 +353,9 @@ def main(args):
     )
   if model_path is not None:
     model = stable_baselines3.PPO.load(model_path, env=env)
-  # eval_callback = callbacks.EvalCallback(
-  #     eval_env, eval_freq=eval_freq, best_model_save_path=tensorboard_log)
-  model.learn(total_timesteps=total_timesteps) #, callback=eval_callback)
+  eval_callback = callbacks.EvalCallback(
+      eval_env, eval_freq=eval_freq, best_model_save_path=tensorboard_log)
+  model.learn(total_timesteps=total_timesteps, callback=eval_callback)
 
   logdir = model.logger.dir
   model.save(logdir + "/model")
