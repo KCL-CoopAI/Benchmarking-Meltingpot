@@ -47,12 +47,12 @@ def parse_args():
         "--env-name",
         type=str,
         default="coins",
-        choices=['factory_commons__either_or', 'territory__inside_out', 'clean_up', 'chemistry__three_metabolic_cycles', 'chicken_in_the_matrix__repeated', 'chemistry__two_metabolic_cycles_with_distractors', 'territory__open', 'predator_prey__orchard', 'commons_harvest__open', 
-                 'running_with_scissors_in_the_matrix__one_shot', 'pure_coordination_in_the_matrix__arena', 'predator_prey__open', 'boat_race__eight_races', 'stag_hunt_in_the_matrix__arena', 'collaborative_cooking__crowded', 'predator_prey__alley_hunt', 'commons_harvest__closed', 
-                 'predator_prey__random_forest', 'pure_coordination_in_the_matrix__repeated', 'chicken_in_the_matrix__arena', 'gift_refinements', 'coop_mining', 'fruit_market__concentric_rivers', 'prisoners_dilemma_in_the_matrix__arena', 'rationalizable_coordination_in_the_matrix__repeated', 
-                 'prisoners_dilemma_in_the_matrix__repeated', 'externality_mushrooms__dense', 'rationalizable_coordination_in_the_matrix__arena', 'bach_or_stravinsky_in_the_matrix__arena', 'bach_or_stravinsky_in_the_matrix__repeated', 'collaborative_cooking__asymmetric', 
-                 'collaborative_cooking__cramped', 'paintball__king_of_the_hill', 'collaborative_cooking__forced', 'chemistry__two_metabolic_cycles', 'chemistry__three_metabolic_cycles_with_plentiful_distractors', 'paintball__capture_the_flag', 'commons_harvest__partnership', 
-                 'hidden_agenda', 'collaborative_cooking__figure_eight', 'running_with_scissors_in_the_matrix__arena', 'collaborative_cooking__circuit', 'coins', 'stag_hunt_in_the_matrix__repeated', 'daycare', 'territory__rooms', 'running_with_scissors_in_the_matrix__repeated', 
+        choices=['factory_commons__either_or', 'territory__inside_out', 'clean_up', 'chemistry__three_metabolic_cycles', 'chicken_in_the_matrix__repeated', 'chemistry__two_metabolic_cycles_with_distractors', 'territory__open', 'predator_prey__orchard', 'commons_harvest__open',
+                 'running_with_scissors_in_the_matrix__one_shot', 'pure_coordination_in_the_matrix__arena', 'predator_prey__open', 'boat_race__eight_races', 'stag_hunt_in_the_matrix__arena', 'collaborative_cooking__crowded', 'predator_prey__alley_hunt', 'commons_harvest__closed',
+                 'predator_prey__random_forest', 'pure_coordination_in_the_matrix__repeated', 'chicken_in_the_matrix__arena', 'gift_refinements', 'coop_mining', 'fruit_market__concentric_rivers', 'prisoners_dilemma_in_the_matrix__arena', 'rationalizable_coordination_in_the_matrix__repeated',
+                 'prisoners_dilemma_in_the_matrix__repeated', 'externality_mushrooms__dense', 'rationalizable_coordination_in_the_matrix__arena', 'bach_or_stravinsky_in_the_matrix__arena', 'bach_or_stravinsky_in_the_matrix__repeated', 'collaborative_cooking__asymmetric',
+                 'collaborative_cooking__cramped', 'paintball__king_of_the_hill', 'collaborative_cooking__forced', 'chemistry__two_metabolic_cycles', 'chemistry__three_metabolic_cycles_with_plentiful_distractors', 'paintball__capture_the_flag', 'commons_harvest__partnership',
+                 'hidden_agenda', 'collaborative_cooking__figure_eight', 'running_with_scissors_in_the_matrix__arena', 'collaborative_cooking__circuit', 'coins', 'stag_hunt_in_the_matrix__repeated', 'daycare', 'territory__rooms', 'running_with_scissors_in_the_matrix__repeated',
                  'collaborative_cooking__ring', 'allelopathic_harvest__open'],
         help="The SSD environment to use",
     )
@@ -65,7 +65,7 @@ def parse_args():
     parser.add_argument(
         "--num-cpus",
         type=int,
-        default=4,
+        default=2,
         help="The number of cpus",
     )
     parser.add_argument(
@@ -83,19 +83,19 @@ def parse_args():
     parser.add_argument(
         "--rollout-len",
         type=int,
-        default=1000,
+        default=2,
         help="length of training rollouts AND length at which env is reset",
     )
     parser.add_argument(
         "--total-timesteps",
         type=int,
-        default=10000000,
+        default=100,
         help="Number of environment timesteps",
     )
     parser.add_argument(
         "--total-iterations",
         type=int,
-        default=7800, # approximately 0.5x1e9 timesteps
+        default=7, # approximately 0.5x1e9 timesteps
         help="Number of environment timesteps",
     )
     parser.add_argument(
@@ -187,7 +187,7 @@ def get_config(
   config = config.framework("torch")
   # Use GPUs iff `RLLIB_NUM_GPUS` env var set to > 0.
   # config.num_gpus = int(os.environ.get("RLLIB_NUM_GPUS", "0"))
-  config.num_gpus = 1
+  config.num_gpus = 0
   config.log_level = "DEBUG"
 
   # 2. Set environment config. This will be passed to
@@ -207,8 +207,8 @@ def get_config(
     rgb_shape = test_env.observation_space[f"player_{i}"]["RGB"].shape
     sprite_x = rgb_shape[0] // 8
     sprite_y = rgb_shape[1] // 8
-    # sprite_x = rgb_shape[0] 
-    # sprite_y = rgb_shape[1] 
+    # sprite_x = rgb_shape[0]
+    # sprite_y = rgb_shape[1]
 
     policies[f"agent_{i}"] = policy.PolicySpec(
         policy_class=None,  # use default policy
@@ -254,7 +254,7 @@ def get_config(
   config.model["lstm_use_prev_action"] = True
   config.model["lstm_use_prev_reward"] = False
   config.model["lstm_cell_size"] = lstm_cell_size
-  
+
 
   return config
 
@@ -270,7 +270,8 @@ def train(config, alg, local_mode, use_wandb, num_cpus, num_iterations=1):
     Training results.
   """
   tune.register_env("meltingpot", utils.env_creator)
-  ray.init(num_cpus=num_cpus, num_gpus=config.num_gpus,resources={"accelerator_type:A100":1}, local_mode=local_mode)
+  # ray.init(num_cpus=num_cpus, num_gpus=config.num_gpus,resources={"accelerator_type:A100":1}, local_mode=local_mode)
+  ray.init(num_cpus=num_cpus, num_gpus=0, local_mode=local_mode)
   stop = {
       "training_iteration": num_iterations,
   }

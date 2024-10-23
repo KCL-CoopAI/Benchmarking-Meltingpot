@@ -10,7 +10,7 @@
         "request": "launch",
         "program": "sb3_train.py",
         "console": "integratedTerminal",
-        "python": "/home/shuqingshi/miniconda3/envs/meltingpot/bin/python",
+        "python": "/home/zihaoguo/miniconda3/envs/meltingpot/bin/python",
         "justMyCode": false,
       },
     ]

@@ -21,9 +21,10 @@ import gym
 import wandb
 import socket
 from meltingpot import substrate
-import stable_baselines3
+import stable_baselines3_jax
+
 from stable_baselines3.common import callbacks
-from stable_baselines3.common import torch_layers
+# from stable_baselines3.common import torch_layers
 from stable_baselines3.common import vec_env
 import supersuit as ss
 import torch
@@ -32,6 +33,7 @@ import torch.nn.functional as F
 import argparse
 import numpy as np
 import random
+
 import utils
 from wrappers.transform import obs2attr
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device(
@@ -110,7 +112,7 @@ def parse_args():
     parser.add_argument(
         "--total-timesteps",
         type=int,
-        default=1e6,
+        default=1e4,
         help="Number of environment timesteps",
     )
     parser.add_argument(
@@ -147,55 +149,55 @@ def parse_args():
     return args
 
 # Use this with lambda wrapper returning observations only
-class CustomCNN(torch_layers.BaseFeaturesExtractor):
-  """Class describing a custom feature extractor."""
+# class CustomCNN(torch_layers.BaseFeaturesExtractor):
+#   """Class describing a custom feature extractor."""
 
-  def __init__(
-      self,
-      observation_space: gym.spaces.Box,
-      features_dim=128,
-      num_frames=6,
-      fcnet_hiddens=(1024, 128),
-  ):
-    """Construct a custom CNN feature extractor.
+#   def __init__(
+#       self,
+#       observation_space: gym.spaces.Box,
+#       features_dim=128,
+#       num_frames=6,
+#       fcnet_hiddens=(1024, 128),
+#   ):
+#     """Construct a custom CNN feature extractor.
 
-    Args:
-      observation_space: the observation space as a gym.Space
-      features_dim: Number of features extracted. This corresponds to the number
-        of unit for the last layer.
-      num_frames: The number of (consecutive) frames to feed into the network.
-      fcnet_hiddens: Sizes of hidden layers.
-    """
-    super().__init__(observation_space, features_dim)
-    # We assume CxHxW images (channels first)
-    # Re-ordering will be done by pre-preprocessing or wrapper
+#     Args:
+#       observation_space: the observation space as a gym.Space
+#       features_dim: Number of features extracted. This corresponds to the number
+#         of unit for the last layer.
+#       num_frames: The number of (consecutive) frames to feed into the network.
+#       fcnet_hiddens: Sizes of hidden layers.
+#     """
+#     super().__init__(observation_space, features_dim)
+#     # We assume CxHxW images (channels first)
+#     # Re-ordering will be done by pre-preprocessing or wrapper
 
-    self.conv = nn.Sequential(
-        nn.Conv2d(
-            num_frames * 3, num_frames * 3, kernel_size=8, stride=4, padding=0),
-        nn.ReLU(),  # 18 * 21 * 21
-        nn.Conv2d(
-            num_frames * 3, num_frames * 6, kernel_size=5, stride=2, padding=0),
-        nn.ReLU(),  # 36 * 9 * 9
-        nn.Conv2d(
-            num_frames * 6, num_frames * 6, kernel_size=3, stride=1, padding=0),
-        nn.ReLU(),  # 36 * 7 * 7
-        nn.Flatten(),
-    )
-    flat_out = num_frames * 6 * 7 * 7
-    self.fc1 = nn.Linear(in_features=flat_out, out_features=fcnet_hiddens[0])
-    self.fc2 = nn.Linear(
-        in_features=fcnet_hiddens[0], out_features=fcnet_hiddens[1])
+#     self.conv = nn.Sequential(
+#         nn.Conv2d(
+#             num_frames * 3, num_frames * 3, kernel_size=8, stride=4, padding=0),
+#         nn.ReLU(),  # 18 * 21 * 21
+#         nn.Conv2d(
+#             num_frames * 3, num_frames * 6, kernel_size=5, stride=2, padding=0),
+#         nn.ReLU(),  # 36 * 9 * 9
+#         nn.Conv2d(
+#             num_frames * 6, num_frames * 6, kernel_size=3, stride=1, padding=0),
+#         nn.ReLU(),  # 36 * 7 * 7
+#         nn.Flatten(),
+#     )
+#     flat_out = num_frames * 6 * 7 * 7
+#     self.fc1 = nn.Linear(in_features=flat_out, out_features=fcnet_hiddens[0])
+#     self.fc2 = nn.Linear(
+#         in_features=fcnet_hiddens[0], out_features=fcnet_hiddens[1])
 
-  def forward(self, observations) -> torch.Tensor:
-    # Convert to tensor, rescale to [0, 1], and convert from
-    #   B x H x W x C to B x C x H x W
-    if observations.shape[1] != 18:
-      observations = observations.permute(0, 3, 1, 2)
-    features = self.conv(observations)
-    features = F.relu(self.fc1(features))
-    features = F.relu(self.fc2(features))
-    return features
+#   def forward(self, observations) -> torch.Tensor:
+#     # Convert to tensor, rescale to [0, 1], and convert from
+#     #   B x H x W x C to B x C x H x W
+#     if observations.shape[1] != 18:
+#       observations = observations.permute(0, 3, 1, 2)
+#     features = self.conv(observations)
+#     features = F.relu(self.fc1(features))
+#     features = F.relu(self.fc2(features))
+#     return features
 
 
 def main(args):
@@ -297,15 +299,15 @@ def main(args):
 
   eval_freq = 1000 // (num_envs * num_agents)
 
-  policy_kwargs = dict(
-      features_extractor_class=CustomCNN,
-      features_extractor_kwargs=dict(
-          features_dim=features_dim,
-          num_frames=num_frames,
-          fcnet_hiddens=fcnet_hiddens,
-      ),
-      net_arch=[features_dim],
-  )
+  # policy_kwargs = dict(
+  #     features_extractor_class=CustomCNN,
+  #     features_extractor_kwargs=dict(
+  #         features_dim=features_dim,
+  #         num_frames=num_frames,
+  #         fcnet_hiddens=fcnet_hiddens,
+  #     ),
+  #     net_arch=[features_dim],
+  # )
 
   tensorboard_log = "./results/sb3/harvest_open_ppo_paramsharing"
 
@@ -319,9 +321,9 @@ def main(args):
                   reinit=True)
 
   if alg == "PPO":
-    model = stable_baselines3.PPO
+    model = stable_baselines3_jax.PPO
     model = model(
-      "CnnPolicy",
+      "MlpPolicy",
       env=env,
       learning_rate=lr,
       n_steps=rollout_len,
@@ -332,12 +334,12 @@ def main(args):
       ent_coef=ent_coef,
       max_grad_norm=grad_clip,
       target_kl=target_kl,
-      policy_kwargs=policy_kwargs,
+      # policy_kwargs=policy_kwargs,
       tensorboard_log=tensorboard_log,
       verbose=verbose,
   )
   elif alg == "A2C":
-    model = stable_baselines3.A2C
+    model = stable_baselines3_jax.A2C
     model = model(
       "CnnPolicy",
       env=env,
@@ -352,15 +354,15 @@ def main(args):
       verbose=verbose,
     )
   if model_path is not None:
-    model = stable_baselines3.PPO.load(model_path, env=env)
-  # eval_callback = callbacks.EvalCallback(
-  #     eval_env, eval_freq=eval_freq, best_model_save_path=tensorboard_log)
-  model.learn(total_timesteps=total_timesteps) #, callback=eval_callback)
+    model = stable_baselines3_jax.PPO.load(model_path, env=env)
+  eval_callback = callbacks.EvalCallback(
+      eval_env, eval_freq=eval_freq, best_model_save_path=tensorboard_log)
+  model.learn(total_timesteps=total_timesteps, callback=eval_callback)
 
-  logdir = model.logger.dir
-  model.save(logdir + "/model")
-  del model
-  stable_baselines3.PPO.load(logdir + "/model")
+  # logdir = model.logger.dir
+  # model.save(logdir + "/model")
+  # del model
+  # stable_baselines3.PPO.load(logdir + "/model")
 
 
 if __name__ == "__main__":
